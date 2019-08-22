@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8"/>
+		<title>主页</title>
+		<link rel="stylesheet" href="/layui/css/layui.css" />
+		<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+		<style type="text/css">
+			body {
+				margin: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<form id="cc"></form>
+		<button id="selectBtn" class="layui-btn layui-btn-sm layui-btn-radius layui-bg-cyan">
+			<i class="layui-icon">&#xe602;</i>select
+		</button>
+		<button id="insertBtn" class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius">
+			<i class="layui-icon">&#xe654;</i>insert
+		</button>
+		<button id="updateBtn" class="layui-btn layui-btn-warm layui-btn-sm layui-btn-radius">
+			<i class="layui-icon">&#xe642;</i>update
+		</button>
+		<button id="deleteBtn" class="layui-btn layui-btn-danger layui-btn-sm layui-btn-radius">
+			<i class="layui-icon">&#xe640;</i>delete
+		</button>
+
+		<hr />
+		<button id="vipBtn" class="layui-btn layui-btn-lg">
+			vip
+		</button>
+		<button id="ipBtn" class="layui-btn layui-btn-lg">
+			ip
+		</button>
+		<button id="pBtn" class="layui-btn layui-btn-lg">
+			p
+		</button>
+		
+		<hr/>
+		<a class="layui-btn layui-btn-sm layui-btn-primary" href="logout">注销</a>
+	</body>
+	<script type="text/javascript">
+		$("#selectBtn").click(function(){
+		$.post("http://localhost:8081/user/select", {
+		} , function(result) {
+			if(result.success) {
+// 				window.location.href = "main.html";
+				alert(result.msg)
+				//必须加上，否则跳转不了
+				return false;
+			} else {
+				alert(result.errorInfo);
+			}
+		} );
+	});
+		$("#insertBtn").click(function(){
+			$("#cc").attr("action","/user/insert").submit();
+			/* $.post("http://localhost:8081/user/insert", {
+			} , function(result) {
+				if(result.success) {
+					alert(result.msg)
+					//必须加上，否则跳转不了
+					return false;
+				} else {
+					alert("err");
+				}
+			} ); */
+		});
+// 		$.("#selectBtn").click(function() {
+// 			alert();
+// 			$.post("http://localhost:8081/user/select", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert(result.errorInfo);
+// 					return false;
+// 				}
+// 			});
+// 		});
+
+// 		$.("#insertBtn").click(function() {
+// 			$.post("http://localhost:8081/user/insert", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert(result.errorInfo);
+// 					return false;
+// 				}
+// 			});
+// 		});
+			$("#updateBtn").click(function(){
+			$.post("http://localhost:8081/user/update", {
+			} , function(result) {
+				if(result.success) {
+//	 				window.location.href = "main.html";
+					alert(result.msg)
+					//必须加上，否则跳转不了
+					return false;
+				} else {
+					alert(result.errorInfo);
+				}
+			} );
+		});
+// 		$.("#updateBtn").click(function() {
+// 			$.post("http://localhost:8081/user/update", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert(result.errorInfo);
+// 					return false;
+// 				}
+// 			});
+// 		});
+			$("#deleteBtn").click(function(){
+				$("#cc").attr("action","/user/delete").submit();
+// 			       $.ajax({
+// 			            type:"get",
+// 			            url:"/user/delete",//请求地址
+// 			            dataType:"html",
+// 			            success:function(data){
+// 			            	alert(data);
+// 			            },
+// 			        });
+		});
+// 		$.("#deleteBtn").click(function() {
+// 			$.post("http://localhost:8081/user/delete", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert(result.errorInfo);
+// 					return false;
+// 				}
+// 			});
+// 		});
+
+// 		$.("#vipBtn").click(function() {
+// 			$.post("http://localhost:8081/user/vip", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert('无权访问');
+// 					return false;
+// 				}
+// 			});
+// 		});
+
+// 		$.("#ipBtn").click(function() {
+// 			$.post("http://localhost:8081/user/ip", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert('无权访问');
+// 					return false;
+// 				}
+// 			});
+// 		});
+// 		$.("#pBtn").click(function() {
+// 			$.post("http://localhost:8081/user/p", {}, function(result) {
+// 				if(result.success) {
+// 					alert(result.msg);
+// 					return false;
+// 				} else {
+// 					alert('无权访问');
+// 					return false;
+// 				}
+// 			});
+// 		});
+	</script>
+
+</html>

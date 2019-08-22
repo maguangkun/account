@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!--  xmlns="http://www.w3.org/1999/xhtml" -->
+<!-- 	xmlns:th="http://www.thymeleaf.org" -->
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>新增字典</title>
+<link rel="stylesheet" href="/layui/css/layui.css" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<header id="header" th:replace="top::html"></header>
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px;">
+				<fieldset class="layui-elem-field layui-field-title"
+					style="margin-top: 50px;">
+					<legend>新增数据字典类型</legend>
+				</fieldset>
+				<form id="addGoodsForm" class="layui-form layui-form-pane" action="/dic/addDic"
+					method="POST">
+					<div class="layui-form-item">
+						<label class="layui-form-label">字典类型</label>
+						<div class="layui-input-block">
+							<input type="text" name="typeName" lay-verify="title"
+								autocomplete="off" placeholder="字典类型" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">字典编码</label>
+						<div class="layui-input-block">
+							<input type="text" name="typeCode" lay-verify="titles"
+								autocomplete="off" placeholder="字典编码" class="layui-input" />
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">日期选择</label>
+							<div class="layui-input-block">
+								<input type="text" name="createTime" lay-verify="date"
+									id="date1" autocomplete="off" class="layui-input" />
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">排序字段</label>
+						<div class="layui-input-block">
+							<input type="text" name="oredrNum" lay-verify="number"
+								autocomplete="off" placeholder="排序字段" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			© layui.com - 底部固定区域
+		</div>
+	</div>
+	<script src="/layui/layui.js" charset="utf-8"></script>
+	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+	<script>
+		layui
+				.use(
+						[ 'form', 'layedit', 'laydate', 'element' ],
+						function() {
+							var element = layui.element;
+							var form = layui.form, layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+							//日期
+							laydate.render({
+								elem : '#date'
+							});
+							laydate.render({
+								elem : '#date1'
+							});
+							//自定义验证规则
+							form.verify({
+								title : function(value) {
+									if (value.length >= 2) {
+
+									} else {
+										return '标题至少得2个字啊';
+									}
+								},
+								titles : function(value) {
+									if (value.length >= 1) {
+
+									} else {
+										return '标题至少得1个字啊';
+									}
+								}
+							});
+							//监听提交
+							form.on('submit(demo1)', function(data) {
+								$.ajax({
+									type : "POST",
+									url : "/dic/addDic",
+									data : $('form').serialize(),
+									dataType : "json",
+									success : function(data) {
+										if (data.code == 0) {
+											alert("添加成功");
+					                        $("form")[0].reset();
+										}else if(data.code == 2){
+											alert(data.msg);
+											window.location.href="/login.html"
+										}else{
+					                        alert(data.msg)
+										}
+									}
+								});
+								return false;
+							});
+						});
+	</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body>
+  <div class="layui-header">
+    <div class="layui-logo"><a href="/sc/loginMain">首页</a></div>
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img"/>
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="/logout">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">账单管理</a>
+          <dl class="layui-nav-child">
+          	<dd><a href="/sc/getScView">账单列表</a></dd> 
+            <dd><a href="/sc/addScView">添加账单</a></dd>
+<!--             <dd><a href="javascript:;">删除账单</a></dd> -->
+<!--             <dd><a href="javascript:;">修改账单</a></dd> -->
+<!--             <dd><a href="javascript:;">查询账单</a></dd> -->
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">字典管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/dic/listDicView">字典列表</a></dd>
+            <dd><a href="/dic/addDicView">添加字典</a></dd>
+<!--             <dd><a href="/dic/updDicView">修改字典</a></dd> -->
+<!--             <dd><a href="/dic/delDicView">删除字典</a></dd> -->
+<!--             <dd><a href="/dic/getDicView">查询字典</a></dd> -->
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+        	<a href="javascript:;">统计数据模块</a>
+          	<dl class="layui-nav-child">
+            	<dd><a href="javascript:;">数据模块1</a></dd>
+            	<dd><a href="javascript:;">数据模块2</a></dd>
+          </dl>
+        </li>
+<!--         <li class="layui-nav-item"><a href="">导出账单</a></li> -->
+<!--         <li class="layui-nav-item"><a href="">导入账单</a></li> -->
+      </ul>
+    </div>
+  </div>
+</body>
+<script src="/layui/layui.js"></script>
+<script>
+// layui.use('element', function(){
+//   var element = layui.element;
+// });
+</script>
+</html>

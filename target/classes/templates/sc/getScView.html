@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>账单清单</title>
+<link rel="stylesheet" href="/layui/css/layui.css" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<header id="header" th:replace="top::html"></header>
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px;">
+				开始日：
+					<div class="layui-input-inline">
+						<input type="text" name="startDate" id="startDate" lay-verify="date"
+							placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"/>
+					</div>
+				结束日：
+					<div class="layui-input-inline">
+						<input type="text" name="endDate" id="endDate" lay-verify="date"
+							placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"/>
+					</div>
+<!-- 					<button class="layui-btn" id="dataBut" data-type="reload">搜索</button> -->
+			</div>
+			<div style="padding: 15px;">
+				搜主键：
+				  <div class="layui-inline">
+				    <input class="layui-input" type="number"  id="demoReload" autocomplete="off"/>
+				  </div>
+				搜收货人：
+				  <div class="layui-inline">
+				    <input class="layui-input"  id="shrName" autocomplete="off"/>
+				  </div>
+			 	 搜货物：
+				  <div class="layui-inline">
+				    <input class="layui-input"  id="serchHW" autocomplete="off"/>
+				  </div>
+				  搜欠款：
+				  <div class="layui-inline">
+				    <input class="layui-input" placeholder="欠,不欠,欠部分"  id="serchQK"  autocomplete="off"/>
+				  </div>
+				   搜单价：
+				  <div class="layui-inline">
+				    <input class="layui-input" type="number" placeholder="货物单价"  id="serchDJ"  autocomplete="off"/>
+				  </div>
+				  <button class="layui-btn" id="layui-btn" data-type="reload">搜索</button>
+				<table class="layui-hide" id="test" lay-filter="test"></table>
+			</div>
+		</div>
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			© layui.com - 底部固定区域
+		</div>
+	</div>
+	<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">查看账单信息</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+  </div>
+</script>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">还款</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+	<script src="/layui/layui.js"></script>
+	<script>
+		layui.use([ 'table', 'laydate','element' ], function() {
+			var element = layui.element;
+			var table = layui.table;
+			var laydate = layui.laydate;
+			laydate.render({
+			    elem: '#endDate'
+			  });
+			laydate.render({
+			    elem: '#startDate'
+			  });
+			table.render({
+				elem : '#test',
+				url : '/sc/getListScView',
+				toolbar : '#toolbarDemo',
+				title : '用户数据表',
+				totalRow: true,
+				cols : [ [ {
+					type : 'checkbox',
+					fixed : 'left'
+				}, {
+					field : 'id',
+					width :  80,
+					title : '主键',
+					fixed : 'left',
+					unresize : true,
+					sort : true,
+					totalRowText: '合计'
+				},/*  {
+					field : 'userId',
+					title : '操作用户'
+				} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+				,  */{
+					field : 'takePerson',
+					width :  80,
+					title : '收货人'
+				}, {
+					field : 'cargoName',
+					title : '货物名称'
+				}, {
+					field : 'debtState',
+					width :  100,
+					title : '收款状态',
+					sort : true
+				}, {
+					field : 'cargoWeight',
+					title : '货物重量',
+					totalRow: true
+				}, {
+					field : 'cargoOnePrice',
+					title : '货物单价'
+				}, {
+					field : 'cargoManyPrice',
+					title : '货物总价',
+					totalRow: true
+				}, {
+					field : 'realityPrice',
+					title : '实际总价',
+					totalRow: true
+				},/*  {
+					field : 'takePersonPhone',
+					title : '手机号'
+				}, */ {
+					field : 'remark',
+					title : '备注'
+				}, {
+					field : 'createBy',
+					width :  80,
+					title : '创建人'
+				}, {
+					field : 'createTime',
+					title : '创建日期',templet:function (d){
+						return dateToStr(d.createTime) 	
+					}
+				},{
+					field : 'updateBy',
+					width :  80,
+					title : '修改人'
+				}, {
+					fixed : 'right',
+					title : '操作',
+					toolbar : '#barDemo'
+				} ] ],
+				page : true,
+				id : 'testReload'
+			});
+
+			//头工具栏事件
+			table.on('toolbar(test)', function(obj) {
+				var checkStatus = table.checkStatus(obj.config.id);
+				switch (obj.event) {
+				case 'getCheckData':
+					var data = checkStatus.data;
+					window.location.href="/sc/getScInfos?id="+data[0].id+""
+					break;
+				case 'getCheckLength':
+					var data = checkStatus.data;
+					layer.msg('选中了：' + data.length + ' 个');
+					break;
+				case 'isAll':
+					layer.msg(checkStatus.isAll ? '全选' : '未全选');
+					break;
+				}
+				;
+			});
+			
+			//监听行工具事件
+			table.on('tool(test)', function(obj) {
+				var data = obj.data;
+				//console.log(obj)
+				if (obj.event === 'del') {
+					layer.confirm('真的删除行么', function(index) {
+						// 		        obj.del();
+						// 		        layer.close(index);
+						$.ajax({
+							type : "POST",
+							url : "/sc/delScView",
+							data : {
+								"id" : data.id
+							},
+							dataType : "json",
+							success : function(data) {
+								if (data.code == 0) {
+									obj.del();
+									layer.close(index);
+								}else if(data.code == 2){
+									alert(data.msg);
+									window.location.href="/login.html"
+								}else {
+									alert(data.msg);
+								}
+							}
+						});
+					});
+				} else if (obj.event === 'edit') {
+					if(data.debtState == '不欠'){
+						layer.alert("改账单已经还清");
+					}else{
+						window.location.href="/sc/getScInfo?id="+data.id+""
+					}
+				} else if(obj.event === 'addCliend'){
+					window.location.href="/dicDetail/addDicDetailView?id="+data.id+""
+				}
+			});
+			  $('#layui-btn').on('click', function(){
+				 var demoReload =  $("#demoReload").val();
+				 var shrName =  $("#shrName").val();//收货人名称
+				 var serchHW =  $("#serchHW").val();//货物
+				 var serchQK =  $("#serchQK").val();//欠款
+				 var serchDJ =  $("#serchDJ").val();//欠款
+				 var startDate=  $("#startDate").val();
+				 var endDate=  $("#endDate").val();
+				  table.reload('testReload', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
+				        }
+				        ,where: {
+				        	id:demoReload,
+				        	takePerson: shrName,
+				        	cargoName: serchHW,
+				        	debtState: serchQK,
+				        	cargoOnePrice:serchDJ,
+				        	startDate :startDate,
+				        	endDate:endDate
+				        }
+				      });
+				});
+ 		});
+		 function dateToStr(date) {
+			 var time = new Date(date.time);
+			 var y = time.getFullYear();
+			 var M = time.getMonth() + 1;
+			 M = M > 10 ? M:("0" + M) ;
+			 var d = time.getDate();
+			 d = d > 10 ? d:("0" + d);
+			 var str = y + "-" + M + "-" + d;
+			 return str;
+			 }
+	</script>
+</body>
+</html>

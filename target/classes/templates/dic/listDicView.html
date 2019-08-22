@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>字典列表</title>
+<link rel="stylesheet" href="/layui/css/layui.css" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<header id="header" th:replace="top::html"></header>
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px;">
+				<table class="layui-hide" id="test" lay-filter="test"></table>
+			</div>
+		</div>
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			© layui.com - 底部固定区域
+		</div>
+	</div>
+	<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+  </div>
+</script>
+	<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="addCliend">新增品种</a>
+</script>
+	<script src="/layui/layui.js"></script>
+	<script>
+		layui.use([ 'table', 'element' ], function() {
+			var element = layui.element;
+			var table = layui.table;
+
+			table.render({
+				elem : '#test',
+				url : '/dic/getListDicView',
+				toolbar : '#toolbarDemo',
+				title : '用户数据表',
+				cols : [ [ {
+					type : 'checkbox',
+					fixed : 'left'
+				}, {
+					field : 'id',
+					title : '主键',
+					fixed : 'left',
+					unresize : true,
+					sort : true
+				}, {
+					field : 'typeName',
+					title : '类型名称'
+				} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+				, {
+					field : 'typeCode',
+					title : '类型编码'
+				}, {
+					field : 'oredrNum',
+					title : '排序字段'
+				}, /* {
+					field : 'createTime',
+					title : '创建时间'
+				}, */ {
+					field : 'createBy',
+					title : '创建人'
+				}, {
+					field : 'updateBy',
+					title : '修改人'
+				}, {
+					fixed : 'right',
+					title : '操作',
+					toolbar : '#barDemo'
+				} ] ],
+				page : true
+			});
+
+			//头工具栏事件
+			table.on('toolbar(test)', function(obj) {
+				var checkStatus = table.checkStatus(obj.config.id);
+				switch (obj.event) {
+				case 'getCheckData':
+					var data = checkStatus.data;
+					$.ajax({
+						type : "POST",
+						url : "/dicDetail/getDicIdSelectCliend",
+						data : {
+							"id" : data[0].id
+						},
+						dataType : "json",
+						success : function(data) {
+							/* if (data.msg == "qxbg") {
+								alert("权限bugou")
+								layer.close(index);
+							} else if (data.msg == "success") {
+								 layer.alert(JSON.stringify(data.data));
+							} else {
+								alert("失败");
+								layer.close(index);
+							} */
+						if (data.code == 0) {
+							 layer.alert(JSON.stringify(data.data));
+						}else if(data.code == 2){
+							alert(data.msg);
+							window.location.href="/login.html"
+						} else {
+							alert(data.msg)
+							layer.close(index);
+						}
+						}
+					});
+					break;
+				case 'getCheckLength':
+					var data = checkStatus.data;
+					layer.msg('选中了：' + data.length + ' 个');
+					break;
+				case 'isAll':
+					layer.msg(checkStatus.isAll ? '全选' : '未全选');
+					break;
+				}
+				;
+			});
+
+			//监听行工具事件
+			table.on('tool(test)', function(obj) {
+				var data = obj.data;
+				//console.log(obj)
+				if (obj.event === 'del') {
+					layer.confirm('真的删除行么', function(index) {
+						// 		        obj.del();
+						// 		        layer.close(index);
+						$.ajax({
+							type : "POST",
+							url : "/dic/delDicView",
+							data : {
+								"id" : data.id
+							},
+							dataType : "json",
+							success : function(data) {
+								/* if (data.msg == "qxbg") {
+									alert("权限bugou")
+									layer.close(index);
+								} else if (data.msg == "success") {
+									obj.del();
+									layer.close(index);
+								} else {
+									alert("删除失败");
+									layer.close(index);
+								} */
+								if (data.code == 0) {
+									obj.del();
+									layer.close(index);
+								}else if(data.code == 2){
+									alert(data.msg);
+									window.location.href="/login.html"
+								}else {
+									alert(data.msg)
+									layer.close(index);
+								}
+							}
+						});
+					});
+				} else if (obj.event === 'edit') {
+					layer.prompt({
+						formType : 2,
+						value : data.typeName
+					}, function(value, index) {
+						$.ajax({
+							type : "POST",
+							url : "/dic/updDicView",
+							data : {
+								"id" : data.id,
+								"typeName" : value
+							},
+							dataType : "json",
+							success : function(data) {
+								/* if (data.msg == "qxbg") {
+									alert("权限bugou")
+									layer.close(index);
+								} else if (data.msg == "success") {
+									obj.update({
+										typeName : value
+									});
+									layer.close(index);
+								} else {
+									alert("删除失败");
+									layer.close(index);
+								} */
+							if (data.code == 0) {
+								obj.update({
+									typeName : value
+								});
+								layer.close(index);
+							}else if(data.code == 2){
+								alert(data.msg);
+								window.location.href="/login.html"
+							}else {
+								alert(data.msg);
+								layer.close(index);
+								} 
+							}
+						});
+		
+					});
+				
+				} else if(obj.event === 'addCliend'){
+					window.location.href="/dicDetail/addDicDetailView?id="+data.id+""
+				}
+			});
+		});
+	</script>
+</body>
+</html>

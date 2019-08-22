@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <title>Main主入口</title>
+  <link rel="stylesheet" href="/layui/css/layui.css"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+<header id="header" th:replace="top::html"></header>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" >内容主体区域
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+<script src="/layui/layui.js"></script>
+<script>
+layui.use('element', function(){
+	  var element = layui.element;
+	});
+</script>
+</body>
+</html>
